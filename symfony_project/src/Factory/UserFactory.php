@@ -10,7 +10,7 @@ use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 
 /**
- * @extends ModelFactory<User> 
+ * @extends ModelFactory<User>
  *
  * @method static User|Proxy createOne(array $attributes = [])
  * @method static User[]|Proxy[] createMany(int $number, array|callable $attributes = [])
@@ -29,27 +29,26 @@ use Zenstruck\Foundry\Proxy;
  */
 final class UserFactory extends ModelFactory
 {
-    private UserPasswordHasherInterface $passwordHasher;
+    private UserPasswordHasherInterface $hasher;
 
-    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    public function __construct(UserPasswordHasherInterface $hasher)
     {
         parent::__construct();
-        $this->passwordHasher = $passwordHasher;
+        $this->hasher = $hasher;
     }
 
     protected function getDefaults(): array
     {
         return [
-            'username' => self::faker()->firstName(),
-            'roles' => [],
+            'username' => self::faker()->firstName,
+            'roles' => []
         ];
     }
 
     protected function initialize(): self
     {
-        // see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
         return $this->afterInstantiate(function (User $user): void {
-            $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
+            $user->setPassword($this->hasher->hashPassword($user, 'password'));
         });
     }
 

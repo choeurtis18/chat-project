@@ -3,7 +3,7 @@ version: '3.8'
 services:
     symfony:
         build: symfony_config
-        container_name: symfony_docker_chat
+        container_name: chat_symfony_docker
         ports:
             - "8245:80"
         volumes:
@@ -14,10 +14,9 @@ services:
             - dev
 
 
-
     maildev:
         image: maildev/maildev
-        container_name: maildev_docker_chat
+        container_name: chat_maildev_docker
         command: bin/maildev --web 80 --smtp 25 --hide-extensions STARTTLS
         ports:
             - "8081:80"
@@ -27,7 +26,7 @@ services:
 
     db:
         image: mariadb:10.7.1
-        container_name: mariadb_docker_chat
+        container_name: chat_mariadb_docker
         restart: always
         volumes:
             - db-data:/var/lib/mysql
@@ -38,7 +37,7 @@ services:
 
     phpmyadmin:
         image: phpmyadmin
-        container_name: phpmyadmin_docker_chat
+        container_name: chat_phpmyadmin_docker
         restart: always
         depends_on:
             - db
@@ -52,7 +51,7 @@ services:
     caddy:
         image: dunglas/mercure
         restart: unless-stopped
-        container_name: mercure_docker_chat
+        container_name: chat_mercure_docker
         environment:
             # Uncomment the following line to disable HTTPS
             SERVER_NAME: ':80'
@@ -78,3 +77,5 @@ networks:
 
 volumes:
     db-data:
+#    caddy_data:
+#    caddy_config:
